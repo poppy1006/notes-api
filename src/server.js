@@ -2,6 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const Note = require('./models/Note');
+
+const bodyparser = require('body-parser');
+app.use(bodyparser.urlencoded({extended: false}));
+app.use(bodyparser.json())
+
 mongoose.set('strictQuery', true);
 
 mongoose.connect("mongodb+srv://poppy:poppy@cluster0.egrx7q7.mongodb.net/notesdb") .then(function(){
@@ -15,6 +20,7 @@ app.get("/" ,function(req,res){
 });
 
 app.get("/notelist" ,async function(req,res){
+    // console.log("request recived");
     var notes = await Note.find();
     res.json(notes);
     // res.send("notes");
@@ -26,17 +32,18 @@ app.get("/notelist/:userid" ,async function(req,res){
     // res.send("notes");
 });
 
-app.get("/noteadd" ,async function(req,res){
+app.post("/noteadd" ,async function(req,res){
 
-    const newNote = new Note({
-        id: "0007",
-        userid: "poppy2@gmail.com",
-        title: "test note2",
-        content: "asdfghjk wedfghy wertgyh wsedrfgtyhuj swedrfgty edrfgt "
-    });
-    await newNote.save();
-   const response = {message:"New note created!"}
-    res.json(response);
+    res.json(req.body);
+//     const newNote = new Note({
+//         id: "0007",
+//         userid: "poppy2@gmail.com",
+//         title: "test note2",
+//         content: "asdfghjk wedfghy wertgyh wsedrfgtyhuj swedrfgty edrfgt "
+//     });
+//     await newNote.save();
+//    const response = {message:"New note created!"}
+//     res.json(response);
     // res.send("notes");
 });
 
