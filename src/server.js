@@ -15,37 +15,13 @@ mongoose.connect("mongodb+srv://poppy:poppy@cluster0.egrx7q7.mongodb.net/notesdb
 });
 
 // routes
-app.get("/" ,function(req,res){
-    res.send("index");
-});
-
-app.get("/notelist" ,async function(req,res){
-    // console.log("request recived");
-    var notes = await Note.find();
-    res.json(notes);
-    // res.send("notes");
-});
-
-app.get("/notelist/:userid" ,async function(req,res){
-    var notes = await Note.find({userid: req.params.userid});
-    res.json(notes);
-    // res.send("notes");
-});
-
-app.post("/noteadd" ,async function(req,res){
-
-    // res.json(req.body);
-    const newNote = new Note({
-        id: req.body.id,
-        userid: req.body.userid,
-        title: req.body.title,
-        content: req.body.content
-    });
-    await newNote.save();
-    const response = { message:"New note created! "};
+app.get("/status" ,function(req,res){
+    const response = { message: "Server online 🚀" };
     res.json(response);
-    // res.send("notes");
 });
+
+const noteRouter = require('./routes/Note')
+app.use("/", noteRouter);
 
 app.listen(5000, function(){
     console.log("🚀 Server started at PORT:5000")
